@@ -7,17 +7,15 @@ function App() {
 
   const outputRef = useRef(null);
 
-  {/* Connection to backend */}
+  {
+    /* Connection to backend */
+  }
 
   const handleGenerate = async () => {
+    try {
+      setOutput("Generating command...");
 
-  try {
-
-    setOutput("Generating command...");
-
-    const response = await fetch(
-      "http://127.0.0.1:8001/generate",
-      {
+      const response = await fetch("https://neoshell-ai.onrender.com", {
         method: "POST",
 
         headers: {
@@ -27,38 +25,36 @@ function App() {
         body: JSON.stringify({
           input: input,
         }),
+      });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (response.ok) {
+        setOutput(data.data);
+      } else {
+        setOutput("Error: " + data.data);
       }
-    );
+    } catch (error) {
+      console.log(error);
 
-    const data = await response.json();
-
-    console.log(data);
-
-    if (response.ok) {
-      setOutput(data.data);
-    } else {
-      setOutput("Error: " + data.data);
+      setOutput("Backend connection failed.");
     }
 
-  } catch (error) {
+    // ALWAYS SCROLL
+    setTimeout(() => {
+      outputRef.current?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }, 100);
+  };
 
-    console.log(error);
-
-    setOutput("Backend connection failed.");
+  {
+    /*  Main frontend UI design */
   }
-
-  // ALWAYS SCROLL
-  setTimeout(() => {
-    outputRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, 100);
-};
-
-  {/*  Main frontend UI design */}
   return (
     <div className="bg-black text-white min-h-screen overflow-x-hidden">
-
       {/* Background Glow */}
       <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(120,0,255,0.18),transparent_40%)]"></div>
 
@@ -81,7 +77,6 @@ function App() {
           md:px-8
         "
       >
-
         {/* Heading */}
         <h1
           className="
@@ -99,10 +94,7 @@ function App() {
             leading-none
           "
         >
-          NEOSHELL{" "}
-          <span className="text-violet-500">
-            AI
-          </span>
+          NEOSHELL <span className="text-violet-500">AI</span>
         </h1>
 
         {/* Subtitle */}
@@ -160,7 +152,6 @@ function App() {
 
           "
         >
-
           {/* Textarea */}
           <textarea
             value={input}
@@ -201,7 +192,6 @@ function App() {
 
           {/* Button */}
           <div className="flex justify-center mt-5">
-
             <button
               onClick={handleGenerate}
               className="
@@ -231,10 +221,7 @@ function App() {
                 sm:gap-3
               "
             >
-
-              <span className="text-violet-500 font-bold">
-                {">_"}
-              </span>
+              <span className="text-violet-500 font-bold">{">_"}</span>
 
               <span
                 className="
@@ -246,11 +233,8 @@ function App() {
               >
                 Generate Command
               </span>
-
             </button>
-
           </div>
-
         </div>
       </div>
 
@@ -274,7 +258,6 @@ function App() {
           items-center
         "
       >
-
         {/* Output Heading */}
         <p
           className="
@@ -320,7 +303,6 @@ function App() {
             sm:min-h-[200px]
           "
         >
-
           <code
             className="
               text-green-400
@@ -334,7 +316,6 @@ function App() {
           >
             {output || "> Output will appear here..."}
           </code>
-
         </div>
       </div>
     </div>
