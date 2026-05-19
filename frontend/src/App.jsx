@@ -15,17 +15,20 @@ function App() {
     try {
       setOutput("Generating command...");
 
-      const response = await fetch("https://neoshell-ai.onrender.com", {
-        method: "POST",
+      const response = await fetch(
+        "https://neoshell-ai.onrender.com/generate",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            input: input,
+          }),
         },
-
-        body: JSON.stringify({
-          input: input,
-        }),
-      });
+      );
 
       const data = await response.json();
 
