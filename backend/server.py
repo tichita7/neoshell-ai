@@ -14,6 +14,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
+    # allow origins=["https://neoshell-ai-frontend.vercel.app/"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
